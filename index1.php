@@ -1,142 +1,24 @@
+<?php include "db.php"; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Thidasna Craft | Aurora Billing Suite</title>
-    <!-- Fonts + Icons + Tailwind + GSAP + SweetAlert -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thidasna Craft - Billing System</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <style>
-        * { font-family: 'Inter', sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            background: radial-gradient(ellipse at 20% 30%, #0a0f2a, #030617);
-            min-height: 100vh;
-            padding: 1.5rem;
-            position: relative;
-        }
-        
-        /* floating orbs */
-        .orb-1, .orb-2 {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(80px);
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.4;
-        }
-        .orb-1 { width: 60vw; height: 60vw; background: #4f46e5; top: -20%; right: -10%; animation: floatOrb 22s infinite alternate ease-in-out; }
-        .orb-2 { width: 50vw; height: 50vw; background: #ec4899; bottom: -15%; left: -10%; animation: floatOrb 26s infinite alternate-reverse; }
-        
-        @keyframes floatOrb {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(5%, 8%) scale(1.3); }
-        }
-        
-        .neo-glass {
-            background: rgba(15, 25, 45, 0.75);
-            backdrop-filter: blur(16px);
-            border-radius: 2rem;
-            border: 1px solid rgba(255,255,255,0.08);
-            box-shadow: 0 25px 40px -12px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03);
-            transition: all 0.3s ease;
-        }
-        
-        .btn-gradient {
-            background: linear-gradient(95deg, #4f46e5, #7c3aed);
-            transition: all 0.2s;
-        }
-        .btn-gradient:hover {
-            transform: scale(1.02);
-            box-shadow: 0 8px 20px -5px #4f46e5;
-        }
-        
-        .btn-warning {
-            background: linear-gradient(95deg, #f59e0b, #d97706);
-        }
-        .btn-danger {
-            background: linear-gradient(95deg, #ef4444, #dc2626);
-        }
-        .btn-success {
-            background: linear-gradient(95deg, #10b981, #059669);
-        }
-        .btn-info {
-            background: linear-gradient(95deg, #3b82f6, #2563eb);
-        }
-        
-        .autocomplete-items {
-            position: absolute;
-            border: 1px solid #334155;
-            border-top: none;
-            z-index: 99;
-            top: 100%;
-            left: 0;
-            right: 0;
-            max-height: 300px;
-            overflow-y: auto;
-            background: #1e293b;
-            border-radius: 0 0 1rem 1rem;
-            backdrop-filter: blur(12px);
-        }
-        .autocomplete-items div {
-            padding: 12px;
-            cursor: pointer;
-            border-bottom: 1px solid #334155;
-            color: #e2e8f0;
-            transition: all 0.2s;
-        }
-        .autocomplete-items div:hover {
-            background: #4f46e5;
-        }
-        
-        .invoice-card, .hold-card {
-            transition: all 0.2s;
-            cursor: pointer;
-            background: #0f172a;
-            border: 1px solid #334155;
-        }
-        .invoice-card:hover, .hold-card:hover {
-            transform: translateY(-3px);
-            border-color: #6366f1;
-            background: #1e293b;
-        }
-        .invoice-card.selected {
-            border: 2px solid #6366f1;
-            background: linear-gradient(135deg, #1e293b, #2d3a5e);
-            box-shadow: 0 0 15px rgba(99,102,241,0.3);
-        }
-        
-        .custom-scroll::-webkit-scrollbar { width: 5px; height: 5px; }
-        .custom-scroll::-webkit-scrollbar-track { background: #1e293b; border-radius: 10px; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 10px; }
-        
-        input, select {
-            background: #0f172a !important;
-            border: 1px solid #334155 !important;
-            border-radius: 1rem !important;
-            padding: 0.75rem 1rem !important;
-            color: #e2e8f0 !important;
-            transition: all 0.2s;
-        }
-        input:focus, select:focus {
-            border-color: #818cf8 !important;
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(99,102,241,0.3);
-        }
-        
-        .footer-aura {
-            background: rgba(2,6,23,0.6);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255,255,255,0.05);
-        }
+        * { font-family: 'Inter', sans-serif; }
         
         @media print {
-            body * { visibility: hidden; }
-            #printableBill, #printableBill * { visibility: visible; }
+            body * {
+                visibility: hidden;
+            }
+            #printableBill, #printableBill * {
+                visibility: visible;
+            }
             #printableBill {
                 position: absolute;
                 top: 0;
@@ -147,71 +29,146 @@
                 background: white;
                 z-index: 9999;
             }
-            .no-print { display: none !important; }
+            .no-print {
+                display: none !important;
+            }
         }
         
-        .table-header {
-            background: rgba(30,41,59,0.8);
-            backdrop-filter: blur(8px);
+        .autocomplete-items {
+            position: absolute;
+            border: 1px solid #d4d4d4;
+            border-bottom: none;
+            border-top: none;
+            z-index: 99;
+            top: 100%;
+            left: 0;
+            right: 0;
+            max-height: 300px;
+            overflow-y: auto;
+            background: white;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
         
-        .badge-glow {
-            box-shadow: 0 0 8px rgba(99,102,241,0.5);
+        .autocomplete-items div {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #e5e7eb;
+            transition: all 0.2s;
+        }
+        
+        .autocomplete-items div:hover {
+            background-color: #e9e9e9;
+        }
+        
+        .search-container {
+            position: relative;
+        }
+        
+        .footer {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+        
+        .hold-bill-card, .invoice-card {
+            transition: all 0.3s ease;
+        }
+        
+        .hold-bill-card:hover, .invoice-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0,0,0,.3);
+            border-radius: 50%;
+            border-top-color: #6366f1;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .search-active {
+            background-color: #e0e7ff;
+            border-color: #6366f1;
+        }
+        
+        .invoice-card {
+            cursor: pointer;
+        }
+        
+        .invoice-card.selected {
+            background-color: #e0e7ff;
+            border: 2px solid #6366f1;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
         }
     </style>
 </head>
-<body class="relative z-10">
+<body class="bg-gray-100 p-4 md:p-6">
 
-<div class="max-w-7xl mx-auto">
-    <!-- Header - Modern Glass -->
-    <div class="neo-glass p-6 mb-6 transition-all duration-500">
-        <div class="flex justify-between items-center flex-wrap gap-4">
-            <div class="flex items-center gap-5">
-                <div class="w-14 h-14 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/30">
-                    <i class="fas fa-crown text-white text-2xl"></i>
-                </div>
+<div class="max-w-6xl mx-auto">
+    <!-- Main Billing Interface -->
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden mb-6 no-print">
+        <div class="bg-gradient-to-r from-indigo-700 to-purple-800 px-6 py-4 text-white">
+            <div class="flex justify-between items-center">
                 <div>
-                    <h1 class="text-3xl font-extrabold tracking-tight"><span class="bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 bg-clip-text text-transparent">THIDASNA CRAFT</span></h1>
-                    <p class="text-slate-300 text-sm">✦ Premium Billing Terminal ✦</p>
+                    <h1 class="text-2xl font-bold">✨ THIDASNA CRAFT</h1>
+                    <p class="text-sm opacity-90">Premium Billing System</p>
                 </div>
-            </div>
-            <div class="bg-slate-800/50 px-5 py-2 rounded-2xl backdrop-blur-sm text-right">
-                <p class="text-slate-200 text-sm"><i class="far fa-calendar-alt text-indigo-300 mr-2"></i><span id="currentDate"></span></p>
-                <p class="text-slate-300 text-xs mt-1"><i class="far fa-clock text-indigo-300 mr-2"></i><span id="currentTime"></span></p>
+                <div class="text-right">
+                    <p class="text-sm">Date: <span id="currentDate"></span></p>
+                    <p class="text-sm">Time: <span id="currentTime"></span></p>
+                </div>
             </div>
         </div>
-    </div>
-    
-    <!-- Main Billing Card -->
-    <div class="neo-glass overflow-hidden mb-8">
+        
         <!-- Search & Controls -->
-        <div class="p-6 border-b border-white/10">
-            <div class="flex flex-wrap gap-3 mb-5">
+        <div class="p-5 border-b">
+            <div class="flex gap-3 mb-4">
                 <div class="flex-1 search-container relative">
-                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                     <input type="text" id="searchInput" placeholder="Search by item code or description..." 
-                           class="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-800/50 border-slate-700 text-white"
+                           class="w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-indigo-400"
                            autocomplete="off">
                     <div id="autocompleteList" class="autocomplete-items hidden"></div>
                 </div>
-                <button onclick="addSelectedItem()" class="btn-gradient px-6 rounded-xl text-white font-semibold">
-                    <i class="fas fa-plus-circle mr-2"></i> Add
+                <button onclick="addSelectedItem()" class="bg-indigo-600 text-white px-6 rounded-xl hover:bg-indigo-700">
+                    <i class="fas fa-plus"></i> Add
                 </button>
             </div>
-            <div class="flex flex-wrap gap-3">
-                <button onclick="holdBill()" class="btn-warning text-white px-5 py-2 rounded-xl font-medium shadow-lg"><i class="fas fa-pause-circle mr-2"></i> Hold Bill</button>
-                <button onclick="showHoldBills()" class="bg-purple-600 hover:bg-purple-500 text-white px-5 py-2 rounded-xl font-medium"><i class="fas fa-history mr-2"></i> View Hold Bills</button>
-                <button onclick="clearBill()" class="btn-danger text-white px-5 py-2 rounded-xl font-medium"><i class="fas fa-trash-alt mr-2"></i> Clear</button>
-                <button onclick="printCurrentBill()" class="btn-success text-white px-5 py-2 rounded-xl font-medium"><i class="fas fa-print mr-2"></i> Print & Save</button>
-                <button onclick="showReprintModal()" class="btn-info text-white px-5 py-2 rounded-xl font-medium"><i class="fas fa-print mr-2"></i> Reprint Bill</button>
+            <div class="flex gap-3 flex-wrap">
+                <button onclick="holdBill()" class="bg-yellow-500 text-white px-5 py-2 rounded-lg hover:bg-yellow-600">
+                    <i class="fas fa-pause-circle"></i> Hold Bill
+                </button>
+                <button onclick="showHoldBills()" class="bg-purple-600 text-white px-5 py-2 rounded-lg hover:bg-purple-700">
+                    <i class="fas fa-history"></i> View Hold Bills
+                </button>
+                <button onclick="clearBill()" class="bg-red-500 text-white px-5 py-2 rounded-lg hover:bg-red-600">
+                    <i class="fas fa-trash-alt"></i> Clear
+                </button>
+                <button onclick="printCurrentBill()" class="bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700">
+                    <i class="fas fa-print"></i> Print & Save
+                </button>
+                <button onclick="showReprintModal()" class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700">
+                    <i class="fas fa-print"></i> Reprint Bill
+                </button>
             </div>
         </div>
         
         <!-- Bill Items Table -->
-        <div class="overflow-x-auto p-5 custom-scroll">
+        <div class="overflow-x-auto p-5">
             <table class="w-full">
-                <thead class="table-header sticky top-0">
-                    <tr class="text-slate-300 text-sm">
+                <thead class="bg-gray-100">
+                    <tr>
                         <th class="p-3 text-left">Item Code</th>
                         <th class="p-3 text-left">Description</th>
                         <th class="p-3 text-center">Qty</th>
@@ -222,39 +179,55 @@
                     </tr>
                 </thead>
                 <tbody id="billItemsBody">
-                    <tr><td colspan="7" class="text-center py-12 text-slate-400"><i class="fas fa-cart-plus text-4xl mb-3 opacity-50"></i><br>No items added. Search & add products.</td></tr>
+                    <tr><td colspan="7" class="text-center py-8 text-gray-400">No items added. Search and add products.右侧</tr>
                 </tbody>
             </table>
         </div>
         
         <!-- Totals Section -->
-        <div class="p-6 bg-slate-900/40 border-t border-white/10">
-            <div class="flex flex-wrap justify-between gap-6">
-                <div class="space-y-3">
-                    <div class="flex items-center gap-3"><label class="w-32 font-semibold text-slate-200">Bill Discount %</label><input type="number" id="billDiscount" value="0" step="0.5" class="w-28 rounded-xl" oninput="calculateTotals()"></div>
-                    <div class="flex items-center gap-3"><label class="w-32 font-semibold text-slate-200">Tax %</label><input type="number" id="taxPercent" value="0" step="0.5" class="w-28 rounded-xl" oninput="calculateTotals()"></div>
+        <div class="p-5 bg-gray-50 border-t">
+            <div class="flex justify-between gap-6 flex-wrap">
+                <div class="flex-1 space-y-3">
+                    <div class="flex items-center gap-3">
+                        <label class="w-32 font-semibold">Bill Discount %</label>
+                        <input type="number" id="billDiscount" value="0" step="0.5" class="border rounded-lg px-3 py-2 w-28" oninput="calculateTotals()">
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <label class="w-32 font-semibold">Tax %</label>
+                        <input type="number" id="taxPercent" value="0" step="0.5" class="border rounded-lg px-3 py-2 w-28" oninput="calculateTotals()">
+                    </div>
                 </div>
-                <div class="text-right space-y-2 text-slate-200">
-                    <p>Subtotal: Rs <span id="subtotal" class="font-mono">0.00</span></p>
-                    <p class="text-amber-400">Discount: -Rs <span id="discountAmount" class="font-mono">0.00</span></p>
-                    <p class="text-emerald-400">Tax: +Rs <span id="taxAmount" class="font-mono">0.00</span></p>
-                    <p class="text-3xl font-bold text-transparent bg-gradient-to-r from-indigo-300 to-purple-300 bg-clip-text">Total: Rs <span id="finalTotal">0.00</span></p>
+                <div class="flex-1 text-right space-y-2">
+                    <p>Subtotal: Rs <span id="subtotal">0.00</span></p>
+                    <p class="text-red-600">Discount: -Rs <span id="discountAmount">0.00</span></p>
+                    <p class="text-green-600">Tax: +Rs <span id="taxAmount">0.00</span></p>
+                    <p class="text-2xl font-bold text-indigo-700">Total: Rs <span id="finalTotal">0.00</span></p>
                 </div>
             </div>
         </div>
     </div>
     
     <!-- Footer -->
-    <div class="footer-aura rounded-2xl p-6 text-center text-slate-300 no-print">
-        <div class="flex flex-wrap justify-between items-center gap-4">
-            <div><p class="text-sm">© 2026-2027 Thidasna Craft — All Rights Reserved</p><p class="text-xs opacity-70">Galle Road, Balapitiya, Sri Lanka</p></div>
-            <div><i class="fas fa-gem text-indigo-400 text-xl"></i><p class="text-xs font-mono mt-1">Vexel IT by Kavizz | 📞 +94 74 089 0730</p></div>
-            <div><i class="fas fa-certificate text-indigo-400"></i><p class="text-xs">Version 4.0 · Aurora Suite</p></div>
+    <div class="footer no-print">
+        <div class="flex justify-between items-center flex-wrap gap-4">
+            <div class="text-left">
+                <p class="text-sm opacity-90">© 2026-2027 Thidasna Craft - All Rights Reserved</p>
+                <p class="text-xs opacity-75 mt-1">Galle Road, Balapitiya, Sri Lanka</p>
+            </div>
+            <div class="text-center">
+                <i class="fas fa-code"></i>
+                <p class="text-sm font-semibold">Developed by Vexel IT by Kavizz</p>
+                <p class="text-xs opacity-75">📞 94740890730</p>
+            </div>
+            <div class="text-right">
+                <i class="fas fa-certificate"></i>
+                <p class="text-xs opacity-75">Version 2.0 | Premium Support</p>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- Printable Bill Template (hidden) -->
+<!-- Hidden Printable Bill Template -->
 <div id="printableBill" style="display: none; background: white; padding: 30px; max-width: 800px; margin: 0 auto;">
     <div style="text-align: center; margin-bottom: 20px;">
         <h2 style="font-size: 24px; font-weight: bold;">THIDASNA CRAFT</h2>
@@ -265,111 +238,1034 @@
         <p>Date: <span id="printDate"></span> | Time: <span id="printTime"></span></p>
         <div style="border-top: 1px dashed #000; margin: 10px 0;"></div>
     </div>
+    
     <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
-        <thead><tr style="background: #f3f4f6;"><th style="padding: 10px; text-align: left;">Item</th><th style="padding: 10px; text-align: center;">Qty</th><th style="padding: 10px; text-align: right;">Price (Rs)</th><th style="padding: 10px; text-align: right;">Total (Rs)</th></tr></thead>
+        <thead>
+            <tr style="background: #f3f4f6; border-bottom: 2px solid #000;">
+                <th style="padding: 10px; text-align: left;">Item</th>
+                <th style="padding: 10px; text-align: center;">Qty</th>
+                <th style="padding: 10px; text-align: right;">Price (Rs)</th>
+                <th style="padding: 10px; text-align: right;">Total (Rs)</th>
+            </tr>
+        </thead>
         <tbody id="printItemsBody"></tbody>
     </table>
+    
     <div style="border-top: 1px dashed #000; margin: 10px 0;"></div>
+    
     <div style="text-align: right; margin: 20px 0;">
         <p>Subtotal: Rs <span id="printSubtotal"></span></p>
         <p>Bill Discount (<span id="printDiscPercent"></span>%): -Rs <span id="printDiscAmount"></span></p>
         <p>Tax (<span id="printTaxPercent"></span>%): +Rs <span id="printTaxAmount"></span></p>
-        <h3 style="font-size: 20px;"><strong>GRAND TOTAL: Rs <span id="printFinalTotal"></span></strong></h3>
+        <h3 style="font-size: 20px; margin-top: 10px;"><strong>GRAND TOTAL: Rs <span id="printFinalTotal"></span></strong></h3>
     </div>
+    
     <div style="border-top: 1px dashed #000; margin: 20px 0;"></div>
+    
     <div style="display: flex; justify-content: space-between; margin-top: 40px;">
-        <div style="text-align: center;"><hr style="width: 150px;"><p>Customer Signature</p></div>
-        <div style="text-align: center;"><hr style="width: 150px;"><p>Cashier Signature</p></div>
+        <div style="text-align: center;">
+            <hr style="width: 150px; margin-bottom: 5px;">
+            <p>Customer Signature</p>
+        </div>
+        <div style="text-align: center;">
+            <hr style="width: 150px; margin-bottom: 5px;">
+            <p>Cashier Signature</p>
+        </div>
     </div>
+    
     <div style="text-align: center; margin-top: 30px; font-size: 12px;">
         <p>Thank you for shopping with us!</p>
-        <p>Developed by Vexel IT by Kavizz | 📞 94740890730</p>
+        <p style="font-size: 10px; margin-top: 5px;">Developed by Vexel IT by Kavizz | 📞 94740890730</p>
+        <p style="font-size: 10px; margin-top: 5px;">This is a computer generated invoice - Valid without signature</p>
     </div>
 </div>
 
 <!-- Hold Bills Modal -->
-<div id="holdBillsModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center z-50 no-print">
-    <div class="bg-slate-800 rounded-2xl p-6 w-full max-w-4xl max-h-[80vh] overflow-y-auto border border-white/10">
-        <div class="flex justify-between items-center mb-5"><h3 class="text-2xl font-bold text-white"><i class="fas fa-pause-circle text-amber-400 mr-2"></i>Held Bills</h3><button onclick="closeHoldBillsModal()" class="text-slate-400 hover:text-white"><i class="fas fa-times text-2xl"></i></button></div>
+<div id="holdBillsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 no-print">
+    <div class="bg-white rounded-xl p-6 w-full max-w-4xl max-h-[80vh] overflow-y-auto">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-2xl font-bold text-gray-800">
+                <i class="fas fa-pause-circle text-yellow-500"></i> Held Bills
+            </h3>
+            <button onclick="closeHoldBillsModal()" class="text-gray-500 hover:text-gray-700">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+        </div>
         <div id="holdBillsList" class="space-y-3"></div>
-        <div class="mt-6 flex justify-end"><button onclick="closeHoldBillsModal()" class="bg-slate-600 px-6 py-2 rounded-xl text-white">Close</button></div>
+        <div class="mt-6 flex justify-end">
+            <button onclick="closeHoldBillsModal()" class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600">
+                Close
+            </button>
+        </div>
     </div>
 </div>
 
-<!-- Reprint Modal -->
-<div id="reprintModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center z-50 no-print">
-    <div class="bg-slate-800 rounded-2xl p-6 w-full max-w-4xl max-h-[85vh] overflow-y-auto border border-white/10">
-        <div class="flex justify-between items-center mb-5"><h3 class="text-2xl font-bold text-white"><i class="fas fa-print text-blue-400 mr-2"></i>Reprint Invoice</h3><button onclick="closeReprintModal()" class="text-slate-400 hover:text-white"><i class="fas fa-times text-2xl"></i></button></div>
-        
-        <div class="bg-slate-700/50 rounded-xl p-5 mb-5">
-            <div class="grid md:grid-cols-2 gap-4 mb-4">
-                <div><label class="text-slate-300 text-sm block mb-1">🔍 Invoice Number</label><input type="text" id="searchInvoice" placeholder="INV-xxx" class="w-full" onkeyup="dynamicSearch()"></div>
-                <div><label class="text-slate-300 text-sm block mb-1">📅 Quick Range</label><select id="quickSearch" onchange="quickDateSearch()" class="w-full"><option value="">Select</option><option value="today">Today</option><option value="yesterday">Yesterday</option><option value="last7days">Last 7 Days</option><option value="last30days">Last 30 Days</option><option value="thismonth">This Month</option></select></div>
-            </div>
-            <div class="border-t border-white/10 pt-4"><p class="text-sm text-slate-300 mb-2">📅 Custom Date Range</p><div class="grid md:grid-cols-3 gap-3"><div><input type="date" id="startDate" class="w-full"></div><div><input type="date" id="endDate" class="w-full"></div><div><button onclick="searchByDateRange()" class="btn-gradient w-full py-2 rounded-xl text-white"><i class="fas fa-search"></i> Search</button></div></div></div>
-            <div class="flex gap-2 mt-4"><button onclick="loadAllInvoices()" class="bg-green-600 hover:bg-green-500 flex-1 py-2 rounded-xl text-white"><i class="fas fa-list"></i> All Invoices</button><button onclick="resetReprintSearch()" class="bg-slate-600 hover:bg-slate-500 flex-1 py-2 rounded-xl text-white"><i class="fas fa-sync-alt"></i> Reset</button></div>
+<!-- Reprint Modal with Enhanced Search -->
+<div id="reprintModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 no-print">
+    <div class="bg-white rounded-xl p-6 w-full max-w-4xl max-h-[85vh] overflow-y-auto">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-2xl font-bold text-gray-800">
+                <i class="fas fa-print text-blue-600"></i> Reprint Bill
+            </h3>
+            <button onclick="closeReprintModal()" class="text-gray-500 hover:text-gray-700">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
         </div>
         
-        <div class="flex justify-between items-center mb-3"><h4 class="font-semibold text-white"><i class="fas fa-file-invoice"></i> Invoice List</h4><span id="resultCount" class="text-sm text-slate-400"></span></div>
-        <div id="invoiceList" class="max-h-80 overflow-y-auto space-y-2 custom-scroll"></div>
-        <div id="selectedInvoicePreview" class="mt-4 hidden bg-indigo-900/50 border border-indigo-500 rounded-xl p-3"><div class="flex justify-between items-center"><div><i class="fas fa-check-circle text-indigo-400"></i><span class="text-white ml-2">Selected: <span id="selectedInvoiceNo" class="font-bold"></span></span></div><button onclick="printSelectedInvoice()" class="btn-success px-5 py-2 rounded-xl text-white"><i class="fas fa-print"></i> Print Now</button></div></div>
-        <div class="mt-5 flex justify-end"><button onclick="closeReprintModal()" class="bg-slate-600 px-6 py-2 rounded-xl text-white">Close</button></div>
+        <!-- Search Options -->
+        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-5 mb-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-hashtag text-indigo-600"></i> Search by Invoice Number
+                    </label>
+                    <input type="text" id="searchInvoice" 
+                           placeholder="Enter invoice number..." 
+                           class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-400"
+                           onkeyup="dynamicSearch()">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-calendar-alt text-indigo-600"></i> Quick Date Range
+                    </label>
+                    <select id="quickSearch" onchange="quickDateSearch()" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-400">
+                        <option value="">Select Date Range</option>
+                        <option value="today">📅 Today</option>
+                        <option value="yesterday">📅 Yesterday</option>
+                        <option value="last7days">📅 Last 7 Days</option>
+                        <option value="last30days">📅 Last 30 Days</option>
+                        <option value="thisweek">📅 This Week</option>
+                        <option value="thismonth">📅 This Month</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-200 my-4 pt-4">
+                <p class="text-sm font-medium text-gray-700 mb-3">
+                    <i class="fas fa-calendar-week text-indigo-600"></i> Custom Date Range Search
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-xs text-gray-600 mb-1">Start Date</label>
+                        <input type="date" id="startDate" class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-400">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-600 mb-1">End Date</label>
+                        <input type="date" id="endDate" class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-400">
+                    </div>
+                    <div class="flex items-end">
+                        <button onclick="searchByDateRange()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 w-full">
+                            <i class="fas fa-search"></i> Search by Date
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex gap-2 mt-4">
+                <button onclick="loadAllInvoices()" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 flex-1">
+                    <i class="fas fa-list"></i> Show All Invoices
+                </button>
+                <button onclick="resetReprintSearch()" class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600">
+                    <i class="fas fa-sync-alt"></i> Reset
+                </button>
+            </div>
+        </div>
+        
+        <!-- Results Header -->
+        <div id="resultsHeader" class="flex justify-between items-center mb-3">
+            <h4 class="font-semibold text-gray-700">
+                <i class="fas fa-file-invoice"></i> Invoices List
+            </h4>
+            <span id="resultCount" class="text-sm text-gray-500"></span>
+        </div>
+        
+        <!-- Results List -->
+        <div id="invoiceList" class="max-h-96 overflow-y-auto space-y-2">
+            <div class="text-center py-8 text-gray-500">
+                <i class="fas fa-inbox text-4xl mb-3"></i>
+                <p>Select search criteria and click search</p>
+                <p class="text-sm mt-2">You can search by invoice number or date range</p>
+            </div>
+        </div>
+        
+        <!-- Selected Invoice Preview -->
+        <div id="selectedInvoicePreview" class="mt-4 hidden">
+            <div class="bg-green-50 border border-green-200 rounded-lg p-3">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <i class="fas fa-check-circle text-green-600"></i>
+                        <span class="font-semibold text-green-700">Selected Invoice:</span>
+                        <span id="selectedInvoiceNo" class="font-bold text-green-800"></span>
+                    </div>
+                    <button onclick="printSelectedInvoice()" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">
+                        <i class="fas fa-print"></i> Print Now
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Close Button -->
+        <div class="mt-6 flex justify-end">
+            <button onclick="closeReprintModal()" class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600">
+                Close
+            </button>
+        </div>
     </div>
 </div>
 
 <script>
-    let billItems = [], nextId = 1, selectedItemData = null, selectedReprintInvoice = null;
+let billItems = [];
+let nextId = 1;
+let currentInvoiceNo = '';
+let selectedItemData = null;
+let searchTimeout = null;
+let selectedReprintInvoice = null;
+let currentInvoices = [];
+
+// Update date/time
+function updateDateTime() {
+    const now = new Date();
+    document.getElementById('currentDate').innerText = now.toLocaleDateString('en-LK');
+    document.getElementById('currentTime').innerText = now.toLocaleTimeString('en-LK');
+}
+updateDateTime();
+setInterval(updateDateTime, 1000);
+
+// Load held bill on startup
+window.onload = function() {
+    loadLastHoldBill();
     
-    // Date/Time
-    function updateDateTime(){ const n=new Date(); document.getElementById('currentDate').innerText=n.toLocaleDateString('en-LK'); document.getElementById('currentTime').innerText=n.toLocaleTimeString('en-LK'); }
-    updateDateTime(); setInterval(updateDateTime,1000);
+    const searchInput = document.getElementById('searchInput');
+    if(searchInput) {
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            const searchTerm = this.value.trim();
+            if(searchTerm.length >= 2) {
+                searchTimeout = setTimeout(() => searchItems(searchTerm), 300);
+            } else {
+                hideAutocomplete();
+            }
+        });
+        
+        searchInput.addEventListener('keypress', function(e) {
+
+            if(e.key === 'Enter') {
+                e.preventDefault();
+                if(selectedItemData) {
+                    selectItem(selectedItemData);
+                } else if(this.value.trim()) {
+                    addItem();
+                }
+            }
+        });
+    }
     
-    window.onload = () => { loadLastHoldBill(); gsap.from(".neo-glass",{duration:0.6,y:30,opacity:0,stagger:0.1}); };
+    // Set default dates
+    const today = new Date().toISOString().split('T')[0];
+    const lastMonth = new Date();
+    lastMonth.setMonth(lastMonth.getMonth() - 1);
+    if(document.getElementById('startDate')) {
+        document.getElementById('startDate').value = lastMonth.toISOString().split('T')[0];
+        document.getElementById('endDate').value = today;
+    }
+};
+
+// Load last hold bill
+function loadLastHoldBill() {
+    const saved = localStorage.getItem('currentHoldBill');
+    if(saved) {
+        Swal.fire({
+            title: 'Hold Bill Found',
+            text: 'You have a bill on hold. Do you want to load it?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Load It',
+            cancelButtonText: 'No, Start Fresh'
+        }).then(result => {
+            if(result.isConfirmed) {
+                const data = JSON.parse(saved);
+                billItems = data.items || [];
+                document.getElementById('billDiscount').value = data.discount || 0;
+                document.getElementById('taxPercent').value = data.tax || 0;
+                renderBill();
+                calculateTotals();
+                Swal.fire('Loaded!', 'Your held bill has been loaded', 'success');
+            } else {
+                localStorage.removeItem('currentHoldBill');
+            }
+        });
+    }
+}
+
+// Dynamic search as user types
+let dynamicSearchTimeout = null;
+function dynamicSearch() {
+    clearTimeout(dynamicSearchTimeout);
+    dynamicSearchTimeout = setTimeout(() => {
+        const searchTerm = document.getElementById('searchInvoice').value.trim();
+        if(searchTerm.length >= 2) {
+            searchInvoices();
+        } else if(searchTerm.length === 0) {
+            loadAllInvoices();
+        }
+    }, 500);
+}
+
+// Load all invoices
+async function loadAllInvoices() {
+    const invoiceListDiv = document.getElementById('invoiceList');
+    invoiceListDiv.innerHTML = `
+        <div class="text-center py-8">
+            <div class="loading-spinner"></div>
+            <p class="mt-2 text-gray-500">Loading all invoices...</p>
+        </div>
+    `;
     
-    // Search autocomplete
-    let searchTimeout;
-    document.getElementById('searchInput').addEventListener('input', function(){ clearTimeout(searchTimeout); let term=this.value.trim(); if(term.length>=2) searchTimeout=setTimeout(()=>searchItems(term),300); else hideAutocomplete(); });
-    document.getElementById('searchInput').addEventListener('keypress', function(e){ if(e.key==='Enter' && selectedItemData){ selectItem(selectedItemData); } else if(e.key==='Enter') addItem(); });
+    try {
+        const response = await fetch('search_invoices.php?limit=100');
+        const data = await response.json();
+        currentInvoices = data.invoices || [];
+        displayInvoiceResults(data);
+    } catch(e) {
+        invoiceListDiv.innerHTML = `
+            <div class="text-center py-8 text-red-500">
+                <i class="fas fa-exclamation-circle text-4xl mb-3"></i>
+                <p>Error loading invoices</p>
+            </div>
+        `;
+        console.error(e);
+    }
+}
+
+// Quick date search
+function quickDateSearch() {
+    const option = document.getElementById('quickSearch').value;
+    const today = new Date();
+    let startDate = new Date();
+    let endDate = new Date();
     
-    async function searchItems(term){ try{ let res=await fetch(`search_items.php?search=${encodeURIComponent(term)}`); let items=await res.json(); if(items?.length) showAutocomplete(items); else hideAutocomplete(); }catch(e){ hideAutocomplete(); } }
-    function showAutocomplete(items){ let div=document.getElementById('autocompleteList'); div.innerHTML=''; div.classList.remove('hidden'); items.forEach(item=>{ let opt=document.createElement('div'); opt.innerHTML=`<div class="flex justify-between"><div><span class="font-semibold text-indigo-300">${escapeHtml(item.item_code)}</span> - ${escapeHtml(item.description)}</div><div class="text-emerald-300">Rs ${parseFloat(item.price).toFixed(2)}</div></div>`; opt.onclick=()=>selectItem(item); div.appendChild(opt); }); }
-    function hideAutocomplete(){ let div=document.getElementById('autocompleteList'); div.classList.add('hidden'); div.innerHTML=''; }
+    switch(option) {
+        case 'today':
+            startDate = today;
+            endDate = today;
+            break;
+        case 'yesterday':
+            startDate.setDate(today.getDate() - 1);
+            endDate = startDate;
+            break;
+        case 'last7days':
+            startDate.setDate(today.getDate() - 7);
+            endDate = today;
+            break;
+        case 'last30days':
+            startDate.setDate(today.getDate() - 30);
+            endDate = today;
+            break;
+        case 'thisweek':
+            const day = today.getDay();
+            startDate.setDate(today.getDate() - day);
+            endDate = today;
+            break;
+        case 'thismonth':
+            startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+            endDate = today;
+            break;
+
+        default:
+            return;
+    }
     
-    function selectItem(item){ selectedItemData=item; document.getElementById('searchInput').value=`${item.item_code} - ${item.description}`; hideAutocomplete(); Swal.fire({title:'Add Item',background:'#1e293b',color:'#fff',html:`<div class="text-left"><p><strong>${item.description}</strong> | ${item.item_code}</p><p>Price: Rs ${item.price.toFixed(2)}</p><hr class="my-2 border-slate-600"><label>Quantity:</label><input id="qtyInput" class="swal2-input" value="1" type="number" step="0.5"><label>Discount %:</label><input id="discInput" class="swal2-input" value="0" type="number" step="1"></div>`,showCancelButton:true,confirmButtonText:'Add to Bill',preConfirm:()=>{ let qty=parseFloat(document.getElementById('qtyInput').value),disc=parseFloat(document.getElementById('discInput').value); if(isNaN(qty)||qty<=0) Swal.showValidationMessage('Invalid qty'); return {qty,disc}; }}).then(res=>{ if(res.isConfirmed){ addItemToBill(item,res.value.qty,res.value.disc); document.getElementById('searchInput').value=''; selectedItemData=null; } }); }
-    function addSelectedItem(){ if(selectedItemData) selectItem(selectedItemData); else addItem(); }
-    async function addItem(){ let search=document.getElementById('searchInput').value.trim(); if(!search){ Swal.fire('Warning','Enter item code','warning'); return; } try{ let res=await fetch(`get_item.php?search=${encodeURIComponent(search)}`); let item=await res.json(); if(item?.item_code){ let qtyRes=await Swal.fire({title:'Quantity',input:'number',inputValue:1,background:'#1e293b',color:'#fff'}); let discRes=await Swal.fire({title:'Discount %',input:'number',inputValue:0,background:'#1e293b',color:'#fff'}); addItemToBill(item,parseFloat(qtyRes.value||1),parseFloat(discRes.value||0)); document.getElementById('searchInput').value=''; selectedItemData=null; } else{ let create=await Swal.fire({title:'Not Found','text':'Create new?',showCancelButton:true}); if(create.isConfirmed){ let priceRes=await Swal.fire({title:'Price',input:'number'}); await fetch('add_item.php',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:`description=${encodeURIComponent(search)}&price=${priceRes.value}`}); addItem(); } } }catch(e){ Swal.fire('Error','Cannot fetch','error'); } }
-    function addItemToBill(item,qty,disc){ billItems.push({id:nextId++,item_code:item.item_code,description:item.description,qty:qty,price:parseFloat(item.price),discount:disc}); renderBill(); calculateTotals(); }
-    function renderBill(){ let tbody=document.getElementById('billItemsBody'); if(!billItems.length){ tbody.innerHTML='<tr><td colspan="7" class="text-center py-12 text-slate-400"><i class="fas fa-cart-plus text-4xl mb-3 opacity-50"></i><br>No items added. Search & add products.</td></tr>'; return; } tbody.innerHTML=billItems.map(item=>{ let total=(item.qty*item.price)*(1-item.discount/100); return `<tr class="border-b border-white/5"><td class="p-3 font-mono text-indigo-300">${escapeHtml(item.item_code)}</td><td class="p-3 text-slate-200">${escapeHtml(item.description)}</td><td class="p-3 text-center"><button onclick="updateQty(${item.id},-1)" class="bg-slate-700 px-2 py-1 rounded-lg">-</button><span class="mx-3 font-bold">${item.qty}</span><button onclick="updateQty(${item.id},1)" class="bg-slate-700 px-2 py-1 rounded-lg">+</button></td><td class="p-3 text-right font-mono">${item.price.toFixed(2)}</td><td class="p-3 text-center"><input type="number" value="${item.discount}" onchange="updateDisc(${item.id},this.value)" class="w-20 rounded-lg text-center" step="1" min="0" max="100"></td><td class="p-3 text-right font-bold text-emerald-300">${total.toFixed(2)}</td><td class="p-3 text-center"><button onclick="removeItem(${item.id})" class="text-red-400 hover:text-red-300"><i class="fas fa-trash-alt"></i></button></td></tr>`; }).join(''); }
-    function updateQty(id,delta){ let item=billItems.find(i=>i.id===id); if(item){ item.qty=Math.max(0.5,item.qty+delta); renderBill(); calculateTotals(); } }
-    function updateDisc(id,val){ let item=billItems.find(i=>i.id===id); if(item){ item.discount=parseFloat(val)||0; renderBill(); calculateTotals(); } }
-    function removeItem(id){ billItems=billItems.filter(i=>i.id!==id); renderBill(); calculateTotals(); }
-    function calculateTotals(){ let subtotal=billItems.reduce((sum,i)=>sum+(i.qty*i.price)*(1-i.discount/100),0); let discPercent=parseFloat(document.getElementById('billDiscount').value)||0; let taxPercent=parseFloat(document.getElementById('taxPercent').value)||0; let discAmt=subtotal*discPercent/100; let afterDisc=subtotal-discAmt; let taxAmt=afterDisc*taxPercent/100; let final=afterDisc+taxAmt; document.getElementById('subtotal').innerText=subtotal.toFixed(2); document.getElementById('discountAmount').innerText=discAmt.toFixed(2); document.getElementById('taxAmount').innerText=taxAmt.toFixed(2); document.getElementById('finalTotal').innerText=final.toFixed(2); }
-    function clearBill(){ Swal.fire({title:'Clear Bill?',text:'All items will be removed',icon:'warning',background:'#1e293b',color:'#fff',showCancelButton:true}).then(res=>{ if(res.isConfirmed){ billItems=[]; document.getElementById('billDiscount').value=0; document.getElementById('taxPercent').value=0; renderBill(); calculateTotals(); localStorage.removeItem('currentHoldBill'); Swal.fire('Cleared!','','success'); } }); }
-    function holdBill(){ if(!billItems.length){ Swal.fire('Warning','No items','warning'); return; } let holdData={id:Date.now(),timestamp:new Date().toLocaleString(),items:billItems,discount:document.getElementById('billDiscount').value,tax:document.getElementById('taxPercent').value,total:document.getElementById('finalTotal').innerText}; let held=JSON.parse(localStorage.getItem('heldBills')||'[]'); held.push(holdData); localStorage.setItem('heldBills',JSON.stringify(held)); localStorage.setItem('currentHoldBill',JSON.stringify({items:billItems,discount:document.getElementById('billDiscount').value,tax:document.getElementById('taxPercent').value})); Swal.fire('Held!','Bill saved','success'); }
-    function showHoldBills(){ let held=JSON.parse(localStorage.getItem('heldBills')||'[]'); let listDiv=document.getElementById('holdBillsList'); if(!held.length) listDiv.innerHTML='<div class="text-center py-8 text-slate-400"><i class="fas fa-inbox text-5xl"></i><p>No held bills</p></div>'; else listDiv.innerHTML=held.reverse().map(b=>`<div class="hold-card rounded-xl p-4 bg-slate-700/50"><div class="flex justify-between"><div><p class="font-bold text-white">Bill #${b.id}</p><p class="text-sm text-slate-300">${b.timestamp}</p><p class="text-sm">Items: ${b.items.length} | Total: Rs ${b.total}</p></div><div class="flex gap-2"><button onclick="loadHoldBill(${b.id})" class="bg-green-600 px-3 py-1 rounded-lg text-white"><i class="fas fa-download"></i> Load</button><button onclick="deleteHoldBill(${b.id})" class="bg-red-600 px-3 py-1 rounded-lg text-white"><i class="fas fa-trash"></i> Del</button></div></div></div>`).join(''); document.getElementById('holdBillsModal').classList.remove('hidden'); document.getElementById('holdBillsModal').classList.add('flex'); }
-    function loadHoldBill(id){ let held=JSON.parse(localStorage.getItem('heldBills')||'[]'); let bill=held.find(b=>b.id===id); if(bill){ billItems=bill.items; document.getElementById('billDiscount').value=bill.discount; document.getElementById('taxPercent').value=bill.tax; renderBill(); calculateTotals(); localStorage.setItem('currentHoldBill',JSON.stringify({items:bill.items,discount:bill.discount,tax:bill.tax})); Swal.fire('Loaded','Bill restored','success'); closeHoldBillsModal(); } }
-    function deleteHoldBill(id){ Swal.fire({title:'Delete?',text:'Permanent',icon:'warning',showCancelButton:true}).then(res=>{ if(res.isConfirmed){ let held=JSON.parse(localStorage.getItem('heldBills')||'[]'); held=held.filter(b=>b.id!==id); localStorage.setItem('heldBills',JSON.stringify(held)); showHoldBills(); Swal.fire('Deleted','','success'); } }); }
-    function closeHoldBillsModal(){ let m=document.getElementById('holdBillsModal'); m.classList.add('hidden'); m.classList.remove('flex'); }
+    document.getElementById('startDate').value = startDate.toISOString().split('T')[0];
+    document.getElementById('endDate').value = endDate.toISOString().split('T')[0];
+    searchByDateRange();
+}
+
+// Search by date range
+async function searchByDateRange() {
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
     
-    async function printCurrentBill(){ if(!billItems.length){ Swal.fire('Error','No items','error'); return; } let data={items:billItems,bill_discount:parseFloat(document.getElementById('billDiscount').value),tax:parseFloat(document.getElementById('taxPercent').value)}; try{ let res=await fetch('save_invoice.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}); let result=await res.json(); if(result.success){ await printBill(result.invoice); localStorage.removeItem('currentHoldBill'); Swal.fire('Success',`Invoice ${result.invoice} saved`,'success').then(()=>{ billItems=[]; renderBill(); calculateTotals(); }); } else Swal.fire('Error','Save failed','error'); }catch(e){ Swal.fire('Error','Server error','error'); } }
-    async function printBill(invoiceNo){ Swal.fire({title:'Loading...',didOpen:()=>{Swal.showLoading();},allowOutsideClick:false}); let res=await fetch(`get_invoice.php?invoice_no=${invoiceNo}`); let data=await res.json(); Swal.close(); if(data.success){ let inv=data.invoice,items=data.items; document.getElementById('printInvoiceNo').innerText=inv.invoice_no; let d=new Date(inv.created_at); document.getElementById('printDate').innerText=d.toLocaleDateString(); document.getElementById('printTime').innerText=d.toLocaleTimeString(); document.getElementById('printItemsBody').innerHTML=items.map(it=>`<tr><td style="padding:8px;">${escapeHtml(it.description)}</td><td style="text-align:center;">${it.quantity}</td><td style="text-align:right;">${parseFloat(it.price).toFixed(2)}</td><td style="text-align:right;">${parseFloat(it.total).toFixed(2)}</td></tr>`).join(''); document.getElementById('printSubtotal').innerText=parseFloat(inv.subtotal).toFixed(2); document.getElementById('printDiscPercent').innerText=inv.bill_discount_percent; document.getElementById('printDiscAmount').innerText=parseFloat(inv.bill_discount_amount).toFixed(2); document.getElementById('printTaxPercent').innerText=inv.tax_percent; document.getElementById('printTaxAmount').innerText=parseFloat(inv.tax_amount).toFixed(2); document.getElementById('printFinalTotal').innerText=parseFloat(inv.final_total).toFixed(2); let printDiv=document.getElementById('printableBill'); printDiv.style.display='block'; setTimeout(()=>{ window.print(); setTimeout(()=>{ printDiv.style.display='none'; Swal.fire('Printed!','','success'); },500); },100); } else Swal.fire('Error','Fetch failed','error'); }
-    async function reprintInvoice(invoiceNo){ closeReprintModal(); await printBill(invoiceNo); }
+    if(!startDate || !endDate) {
+        Swal.fire('Warning', 'Please select both start and end dates', 'warning');
+        return;
+    }
     
-    // Reprint modal functions
-    function showReprintModal(){ document.getElementById('reprintModal').classList.remove('hidden'); document.getElementById('reprintModal').classList.add('flex'); selectedReprintInvoice=null; document.getElementById('selectedInvoicePreview').classList.add('hidden'); loadAllInvoices(); }
-    function closeReprintModal(){ let m=document.getElementById('reprintModal'); m.classList.add('hidden'); m.classList.remove('flex'); }
-    async function loadAllInvoices(){ let invoiceList=document.getElementById('invoiceList'); invoiceList.innerHTML='<div class="text-center py-8"><div class="loading-spinner"></div><p class="text-slate-400">Loading...</p></div>'; try{ let res=await fetch('search_invoices.php?limit=100'); let data=await res.json(); currentInvoices=data.invoices||[]; displayInvoiceResults(data); }catch(e){ invoiceList.innerHTML='<div class="text-center py-8 text-red-400">Error</div>'; } }
-    function displayInvoiceResults(data){ let listDiv=document.getElementById('invoiceList'); let countSpan=document.getElementById('resultCount'); if(data.success && data.invoices?.length){ countSpan.innerText=`${data.invoices.length} invoice(s)`; listDiv.innerHTML=`<div class="space-y-2">${data.invoices.map(inv=>`<div class="invoice-card rounded-xl p-4 ${selectedReprintInvoice===inv.invoice_no?'selected':''}" onclick="selectInvoiceForReprint('${inv.invoice_no}')"><div class="flex justify-between items-center"><div><p class="font-bold text-indigo-300">${inv.invoice_no}</p><p class="text-xs text-slate-400">${new Date(inv.created_at).toLocaleString()}</p><p class="text-sm">Amount: Rs ${parseFloat(inv.final_total).toFixed(2)}</p></div><button onclick="event.stopPropagation(); reprintInvoice('${inv.invoice_no}')" class="btn-success px-4 py-1 rounded-lg text-sm"><i class="fas fa-print"></i> Reprint</button></div></div>`).join('')}</div>`; } else { countSpan.innerText='0 invoices'; listDiv.innerHTML='<div class="text-center py-8 text-slate-400"><i class="fas fa-search"></i><p>No invoices found</p></div>'; } }
-    function selectInvoiceForReprint(invoiceNo){ selectedReprintInvoice=invoiceNo; document.getElementById('selectedInvoiceNo').innerText=invoiceNo; document.getElementById('selectedInvoicePreview').classList.remove('hidden'); document.querySelectorAll('.invoice-card').forEach(c=>c.classList.remove('selected')); event.currentTarget.classList.add('selected'); }
-    function printSelectedInvoice(){ if(selectedReprintInvoice) reprintInvoice(selectedReprintInvoice); else Swal.fire('Warning','Select an invoice','warning'); }
-    let dynamicSearchTimeout; function dynamicSearch(){ clearTimeout(dynamicSearchTimeout); dynamicSearchTimeout=setTimeout(()=>{ let s=document.getElementById('searchInvoice').value.trim(); if(s.length>=2) searchInvoicesByNumber(); else if(!s.length) loadAllInvoices(); },500); }
-    async function searchInvoicesByNumber(){ let s=document.getElementById('searchInvoice').value; try{ let res=await fetch(`search_invoices.php?search=${encodeURIComponent(s)}`); let data=await res.json(); displayInvoiceResults(data); }catch(e){} }
-    function quickDateSearch(){ let opt=document.getElementById('quickSearch').value; let today=new Date(); let start,end; if(opt==='today'){ start=end=today; } else if(opt==='yesterday'){ start=new Date(today); start.setDate(today.getDate()-1); end=start; } else if(opt==='last7days'){ start=new Date(today); start.setDate(today.getDate()-7); end=today; } else if(opt==='last30days'){ start=new Date(today); start.setDate(today.getDate()-30); end=today; } else if(opt==='thismonth'){ start=new Date(today.getFullYear(),today.getMonth(),1); end=today; } else return; document.getElementById('startDate').value=start.toISOString().split('T')[0]; document.getElementById('endDate').value=end.toISOString().split('T')[0]; searchByDateRange(); }
-    async function searchByDateRange(){ let start=document.getElementById('startDate').value,end=document.getElementById('endDate').value; if(!start||!end){ Swal.fire('Warning','Select dates','warning'); return; } let res=await fetch(`search_invoices_by_date.php?start_date=${start}&end_date=${end}`); let data=await res.json(); displayInvoiceResults(data); }
-    function resetReprintSearch(){ document.getElementById('searchInvoice').value=''; document.getElementById('startDate').value=''; document.getElementById('endDate').value=''; document.getElementById('quickSearch').value=''; selectedReprintInvoice=null; document.getElementById('selectedInvoicePreview').classList.add('hidden'); loadAllInvoices(); }
-    function loadLastHoldBill(){ let saved=localStorage.getItem('currentHoldBill'); if(saved){ Swal.fire({title:'Hold Bill Found',text:'Load previous bill?',icon:'question',showCancelButton:true}).then(res=>{ if(res.isConfirmed){ let data=JSON.parse(saved); billItems=data.items; document.getElementById('billDiscount').value=data.discount; document.getElementById('taxPercent').value=data.tax; renderBill(); calculateTotals(); Swal.fire('Loaded!','','success'); } else localStorage.removeItem('currentHoldBill'); }); } }
-    function escapeHtml(str){ if(!str) return ''; return str.replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
-    document.addEventListener('click',function(e){ if(!document.querySelector('.search-container')?.contains(e.target)) hideAutocomplete(); });
+    const invoiceListDiv = document.getElementById('invoiceList');
+    invoiceListDiv.innerHTML = `
+        <div class="text-center py-8">
+            <div class="loading-spinner"></div>
+            <p class="mt-2 text-gray-500">Searching invoices from ${startDate} to ${endDate}...</p>
+        </div>
+    `;
+    
+    try {
+        const response = await fetch(`search_invoices_by_date.php?start_date=${startDate}&end_date=${endDate}`);
+        const data = await response.json();
+        currentInvoices = data.invoices || [];
+        displayInvoiceResults(data);
+    } catch(e) {
+        invoiceListDiv.innerHTML = `
+            <div class="text-center py-8 text-red-500">
+                <i class="fas fa-exclamation-circle text-4xl mb-3"></i>
+                <p>Error searching invoices</p>
+            </div>
+        `;
+        console.error(e);
+    }
+}
+
+// Search invoices
+async function searchInvoices() {
+    const search = document.getElementById('searchInvoice').value;
+    const invoiceListDiv = document.getElementById('invoiceList');
+    
+    if(!search.trim()) {
+        loadAllInvoices();
+        return;
+    }
+    
+    invoiceListDiv.innerHTML = `
+        <div class="text-center py-8">
+            <div class="loading-spinner"></div>
+            <p class="mt-2 text-gray-500">Searching for "${search}"...</p>
+        </div>
+    `;
+    
+    try {
+        const response = await fetch(`search_invoices.php?search=${encodeURIComponent(search)}`);
+        const data = await response.json();
+        currentInvoices = data.invoices || [];
+        displayInvoiceResults(data);
+    } catch(e) {
+        invoiceListDiv.innerHTML = `
+            <div class="text-center py-8 text-red-500">
+                <i class="fas fa-exclamation-circle text-4xl mb-3"></i>
+                <p>Error searching invoices</p>
+            </div>
+        `;
+        console.error(e);
+    }
+}
+
+// Display invoice results with selection capability
+function displayInvoiceResults(data) {
+    const invoiceListDiv = document.getElementById('invoiceList');
+    const resultCountSpan = document.getElementById('resultCount');
+    
+    if(data.success && data.invoices && data.invoices.length > 0) {
+        resultCountSpan.innerHTML = `${data.invoices.length} invoice(s) found`;
+        invoiceListDiv.innerHTML = `
+            <div class="space-y-2">
+                ${data.invoices.map(inv => `
+                    <div class="invoice-card border rounded-lg p-4 hover:bg-gray-50 transition ${selectedReprintInvoice === inv.invoice_no ? 'selected' : ''}" 
+                         onclick="selectInvoice('${inv.invoice_no}')">
+                        <div class="flex justify-between items-center">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-file-invoice text-indigo-600"></i>
+                                    <p class="font-bold text-indigo-600 text-lg">${inv.invoice_no}</p>
+                                    ${selectedReprintInvoice === inv.invoice_no ? '<span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded"><i class="fas fa-check"></i> Selected</span>' : ''}
+                                </div>
+                                <p class="text-sm text-gray-600 mt-1">
+                                    <i class="far fa-calendar-alt"></i> ${new Date(inv.created_at).toLocaleString()}
+                                </p>
+                                <p class="text-sm font-semibold mt-1">
+                                    Amount: Rs ${parseFloat(inv.final_total).toFixed(2)}
+                                </p>
+                            </div>
+                            <button onclick="event.stopPropagation(); reprintInvoice('${inv.invoice_no}')" 
+                                    class="bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 transition flex items-center gap-2">
+                                <i class="fas fa-print"></i> Reprint Now
+                            </button>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    } else {
+        resultCountSpan.innerHTML = '0 invoices found';
+        invoiceListDiv.innerHTML = `
+            <div class="text-center py-8 text-gray-500">
+                <i class="fas fa-search text-4xl mb-3"></i>
+                <p>No invoices found</p>
+                <p class="text-sm mt-2">Try different search criteria</p>
+            </div>
+        `;
+    }
+}
+
+// Select invoice for preview
+function selectInvoice(invoiceNo) {
+    selectedReprintInvoice = invoiceNo;
+    document.getElementById('selectedInvoiceNo').innerText = invoiceNo;
+    document.getElementById('selectedInvoicePreview').classList.remove('hidden');
+    
+    // Highlight selected invoice
+    const invoices = document.querySelectorAll('.invoice-card');
+    invoices.forEach(inv => {
+        inv.classList.remove('selected');
+    });
+    event.currentTarget.classList.add('selected');
+}
+
+// Print selected invoice
+function printSelectedInvoice() {
+    if(selectedReprintInvoice) {
+        reprintInvoice(selectedReprintInvoice);
+    } else {
+        Swal.fire('Warning', 'Please select an invoice first', 'warning');
+    }
+}
+
+// Reset search
+function resetReprintSearch() {
+    document.getElementById('searchInvoice').value = '';
+    document.getElementById('startDate').value = '';
+    document.getElementById('endDate').value = '';
+    document.getElementById('quickSearch').value = '';
+    selectedReprintInvoice = null;
+    document.getElementById('selectedInvoicePreview').classList.add('hidden');
+    
+    const today = new Date().toISOString().split('T')[0];
+    const lastMonth = new Date();
+    lastMonth.setMonth(lastMonth.getMonth() - 1);
+    document.getElementById('startDate').value = lastMonth.toISOString().split('T')[0];
+    document.getElementById('endDate').value = today;
+    
+    loadAllInvoices();
+}
+
+// Search items from database
+async function searchItems(searchTerm) {
+    try {
+        const response = await fetch(`search_items.php?search=${encodeURIComponent(searchTerm)}`);
+        const items = await response.json();
+        
+        if(items && items.length > 0) {
+            showAutocomplete(items);
+        } else {
+            hideAutocomplete();
+        }
+    } catch(e) {
+        console.error('Search error:', e);
+        hideAutocomplete();
+    }
+}
+
+// Show autocomplete suggestions
+function showAutocomplete(items) {
+    const autocompleteDiv = document.getElementById('autocompleteList');
+    autocompleteDiv.innerHTML = '';
+    autocompleteDiv.classList.remove('hidden');
+    
+    items.forEach(item => {
+        const div = document.createElement('div');
+        div.innerHTML = `
+            <div class="flex justify-between items-center">
+                <div>
+                    <span class="font-semibold text-indigo-600">${escapeHtml(item.item_code)}</span>
+                    <span class="mx-2">-</span>
+                    <span>${escapeHtml(item.description)}</span>
+                </div>
+                <div class="text-right">
+                    <span class="text-green-600 font-bold">Rs ${parseFloat(item.price).toFixed(2)}</span>
+                </div>
+            </div>
+        `;
+        div.addEventListener('click', () => {
+            selectItem(item);
+        });
+        autocompleteDiv.appendChild(div);
+    });
+}
+
+// Hide autocomplete
+function hideAutocomplete() {
+    const autocompleteDiv = document.getElementById('autocompleteList');
+    if(autocompleteDiv) {
+        autocompleteDiv.classList.add('hidden');
+        autocompleteDiv.innerHTML = '';
+    }
+}
+
+// Select item from suggestions
+function selectItem(item) {
+    selectedItemData = item;
+    document.getElementById('searchInput').value = `${item.item_code} - ${item.description}`;
+    hideAutocomplete();
+    
+    Swal.fire({
+        title: 'Add Item',
+        html: `
+            <div class="text-left">
+                <p><strong>Item:</strong> ${item.description}</p>
+                <p><strong>Code:</strong> ${item.item_code}</p>
+                <p><strong>Price:</strong> Rs ${parseFloat(item.price).toFixed(2)}</p>
+                <hr class="my-2">
+                <label class="block mt-2">Quantity:</label>
+                <input id="qtyInput" class="swal2-input" value="1" type="number" min="0.5" step="0.5">
+                <label class="block mt-2">Discount %:</label>
+                <input id="discInput" class="swal2-input" value="0" type="number" min="0" max="100" step="1">
+            </div>
+        `,
+        showCancelButton: true,
+        confirmButtonText: 'Add to Bill',
+        preConfirm: () => {
+            const qty = parseFloat(document.getElementById('qtyInput').value);
+            const disc = parseFloat(document.getElementById('discInput').value);
+            if(isNaN(qty) || qty <= 0) {
+                Swal.showValidationMessage('Quantity must be greater than 0');
+                return false;
+            }
+            return { qty, disc };
+        }
+    }).then(result => {
+        if(result.isConfirmed) {
+            addItemToBill(item, result.value.qty, result.value.disc);
+            document.getElementById('searchInput').value = '';
+            selectedItemData = null;
+        }
+    });
+}
+
+// Add selected item
+function addSelectedItem() {
+    if(selectedItemData) {
+        selectItem(selectedItemData);
+    } else {
+        addItem();
+    }
+}
+
+// Add item to bill
+function addItemToBill(item, qty, discount) {
+    billItems.push({
+        id: nextId++,
+        item_code: item.item_code,
+        description: item.description,
+        qty: qty,
+        price: parseFloat(item.price),
+        discount: discount
+    });
+    renderBill();
+    calculateTotals();
+}
+
+// Original add item function
+async function addItem() {
+    const search = document.getElementById('searchInput').value.trim();
+    if(!search) {
+        Swal.fire('Warning', 'Enter item code or description', 'warning');
+        return;
+    }
+    
+    try {
+        const response = await fetch(`get_item.php?search=${encodeURIComponent(search)}`);
+        const item = await response.json();
+        
+        if(item && item.item_code) {
+            const qtyResult = await Swal.fire({ title: 'Quantity', input: 'number', inputValue: 1 });
+            const discResult = await Swal.fire({ title: 'Discount %', input: 'number', inputValue: 0 });
+            
+            billItems.push({
+                id: nextId++,
+                item_code: item.item_code,
+                description: item.description,
+                qty: parseFloat(qtyResult.value || 1),
+                price: parseFloat(item.price),
+                discount: parseFloat(discResult.value || 0)
+            });
+            renderBill();
+            calculateTotals();
+            document.getElementById('searchInput').value = '';
+            selectedItemData = null;
+        } else {
+            const createNew = await Swal.fire({
+                title: 'Item Not Found',
+                text: 'Create new item?',
+                showCancelButton: true
+            });
+            if(createNew.isConfirmed) {
+                const priceResult = await Swal.fire({ title: 'Price (Rs)', input: 'number' });
+                await fetch('add_item.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `description=${encodeURIComponent(search)}&price=${priceResult.value}`
+                });
+                addItem();
+            }
+        }
+    } catch(e) {
+        Swal.fire('Error', 'Could not fetch item', 'error');
+    }
+}
+
+// Hold current bill
+function holdBill() {
+    if(billItems.length === 0) {
+        Swal.fire('Warning', 'No items to hold', 'warning');
+        return;
+    }
+    
+    const holdData = {
+        id: Date.now(),
+        timestamp: new Date().toLocaleString(),
+        items: billItems,
+        discount: document.getElementById('billDiscount').value,
+        tax: document.getElementById('taxPercent').value,
+        total: document.getElementById('finalTotal').innerText
+    };
+    
+    let heldBills = JSON.parse(localStorage.getItem('heldBills') || '[]');
+    heldBills.push(holdData);
+    localStorage.setItem('heldBills', JSON.stringify(heldBills));
+    localStorage.setItem('currentHoldBill', JSON.stringify({
+        items: billItems,
+        discount: document.getElementById('billDiscount').value,
+        tax: document.getElementById('taxPercent').value
+    }));
+    
+    Swal.fire({
+        icon: 'success',
+        title: 'Bill Held Successfully!',
+        text: 'You can retrieve it from "View Hold Bills"',
+        timer: 2000
+    });
+}
+
+// Show all held bills
+function showHoldBills() {
+    const heldBills = JSON.parse(localStorage.getItem('heldBills') || '[]');
+    const modal = document.getElementById('holdBillsModal');
+    const listDiv = document.getElementById('holdBillsList');
+    
+    if(heldBills.length === 0) {
+        listDiv.innerHTML = `
+            <div class="text-center py-8 text-gray-500">
+                <i class="fas fa-inbox text-6xl mb-3"></i>
+                <p>No held bills found</p>
+            </div>
+        `;
+    } else {
+        listDiv.innerHTML = heldBills.reverse().map(bill => `
+            <div class="hold-bill-card border rounded-lg p-4 bg-gray-50">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="font-bold text-lg">Bill #${bill.id}</p>
+                        <p class="text-sm text-gray-600">Held on: ${bill.timestamp}</p>
+                        <p class="text-sm mt-1">Items: ${bill.items.length} | Total: Rs ${bill.total}</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="loadHoldBill(${bill.id})" class="bg-green-600 text-white px-3 py-1 rounded text-sm">
+                            <i class="fas fa-download"></i> Load
+                        </button>
+                        <button onclick="deleteHoldBill(${bill.id})" class="bg-red-500 text-white px-3 py-1 rounded text-sm">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+// Load specific hold bill
+function loadHoldBill(billId) {
+    const heldBills = JSON.parse(localStorage.getItem('heldBills') || '[]');
+    const bill = heldBills.find(b => b.id === billId);
+    
+    if(bill) {
+        billItems = bill.items;
+        document.getElementById('billDiscount').value = bill.discount;
+        document.getElementById('taxPercent').value = bill.tax;
+        renderBill();
+        calculateTotals();
+        localStorage.setItem('currentHoldBill', JSON.stringify({
+            items: bill.items,
+            discount: bill.discount,
+            tax: bill.tax
+        }));
+        Swal.fire('Loaded!', 'Bill loaded successfully', 'success');
+        closeHoldBillsModal();
+    }
+}
+
+// Delete hold bill
+function deleteHoldBill(billId) {
+    Swal.fire({
+        title: 'Delete Hold Bill?',
+        text: "This action cannot be undone!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then(result => {
+        if(result.isConfirmed) {
+            let heldBills = JSON.parse(localStorage.getItem('heldBills') || '[]');
+            heldBills = heldBills.filter(b => b.id !== billId);
+            localStorage.setItem('heldBills', JSON.stringify(heldBills));
+            showHoldBills();
+            Swal.fire('Deleted!', 'Hold bill has been deleted.', 'success');
+        }
+    });
+}
+
+function closeHoldBillsModal() {
+    const modal = document.getElementById('holdBillsModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+// Render bill table
+function renderBill() {
+    const tbody = document.getElementById('billItemsBody');
+    if(billItems.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center py-8 text-gray-400">No items added右侧</tr>';
+        return;
+    }
+    
+    tbody.innerHTML = billItems.map(item => {
+        const total = (item.qty * item.price) * (1 - item.discount / 100);
+        return `
+            <tr class="border-b hover:bg-gray-50">
+                <td class="p-3 text-sm font-mono">${escapeHtml(item.item_code)}</td>
+                <td class="p-3">${escapeHtml(item.description)}</td>
+                <td class="p-3 text-center">
+                    <button onclick="updateQty(${item.id}, -1)" class="bg-gray-200 px-2 rounded hover:bg-gray-300">-</button>
+                    <span class="mx-2 font-semibold">${item.qty}</span>
+                    <button onclick="updateQty(${item.id}, 1)" class="bg-gray-200 px-2 rounded hover:bg-gray-300">+</button>
+                </td>
+                <td class="p-3 text-right font-mono">${item.price.toFixed(2)}</td>
+                <td class="p-3 text-center">
+                    <input type="number" value="${item.discount}" onchange="updateDisc(${item.id}, this.value)" 
+                           class="w-16 border rounded text-center px-1" min="0" max="100" step="1">
+                </td>
+                <td class="p-3 text-right font-bold font-mono">${total.toFixed(2)}</td>
+                <td class="p-3 text-center">
+                    <button onclick="removeItem(${item.id})" class="text-red-500 hover:text-red-700">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+function updateQty(id, delta) {
+    const item = billItems.find(i => i.id === id);
+    if(item) {
+        item.qty = Math.max(0.5, item.qty + delta);
+        renderBill();
+        calculateTotals();
+    }
+}
+
+function updateDisc(id, value) {
+    const item = billItems.find(i => i.id === id);
+    if(item) {
+        item.discount = parseFloat(value) || 0;
+        renderBill();
+        calculateTotals();
+    }
+}
+
+function removeItem(id) {
+    billItems = billItems.filter(i => i.id !== id);
+    renderBill();
+    calculateTotals();
+}
+
+function calculateTotals() {
+    let subtotal = 0;
+    billItems.forEach(item => {
+        subtotal += (item.qty * item.price) * (1 - item.discount / 100);
+    });
+    
+    const discountPercent = parseFloat(document.getElementById('billDiscount').value) || 0;
+    const taxPercent = parseFloat(document.getElementById('taxPercent').value) || 0;
+    
+    const discountAmount = subtotal * (discountPercent / 100);
+    const afterDiscount = subtotal - discountAmount;
+    const taxAmount = afterDiscount * (taxPercent / 100);
+    const finalTotal = afterDiscount + taxAmount;
+    
+    document.getElementById('subtotal').innerText = subtotal.toFixed(2);
+    document.getElementById('discountAmount').innerText = discountAmount.toFixed(2);
+    document.getElementById('taxAmount').innerText = taxAmount.toFixed(2);
+    document.getElementById('finalTotal').innerText = finalTotal.toFixed(2);
+}
+
+function clearBill() {
+    Swal.fire({
+        title: 'Clear bill?',
+        text: "All items will be removed!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        confirmButtonText: 'Yes, clear it'
+    }).then(result => {
+        if(result.isConfirmed) {
+            billItems = [];
+            document.getElementById('billDiscount').value = 0;
+            document.getElementById('taxPercent').value = 0;
+            renderBill();
+            calculateTotals();
+            localStorage.removeItem('currentHoldBill');
+            Swal.fire('Cleared!', 'Bill has been cleared.', 'success');
+        }
+    });
+}
+
+async function printCurrentBill() {
+    if(billItems.length === 0) {
+        Swal.fire('Error', 'No items to print', 'error');
+        return;
+    }
+    
+    const invoiceData = {
+        items: billItems,
+        bill_discount: parseFloat(document.getElementById('billDiscount').value),
+        tax: parseFloat(document.getElementById('taxPercent').value)
+    };
+    
+    try {
+        const response = await fetch('save_invoice.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(invoiceData)
+        });
+        const result = await response.json();
+        
+        if(result.success) {
+            currentInvoiceNo = result.invoice;
+            await printBill(currentInvoiceNo);
+            localStorage.removeItem('currentHoldBill');
+            
+            Swal.fire('Success', `Invoice ${currentInvoiceNo} saved and printed`, 'success').then(() => {
+                billItems = [];
+                renderBill();
+                calculateTotals();
+            });
+        } else {
+            Swal.fire('Error', 'Failed to save invoice', 'error');
+        }
+    } catch(e) {
+        Swal.fire('Error', 'Could not connect to server', 'error');
+    }
+}
+
+// Unified print bill function
+async function printBill(invoiceNo) {
+    try {
+        Swal.fire({
+            title: 'Loading Invoice...',
+            text: 'Please wait while we fetch the invoice details',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+        
+        const response = await fetch(`get_invoice.php?invoice_no=${invoiceNo}`);
+        const data = await response.json();
+        
+        Swal.close();
+        
+        if(data.success) {
+            const invoice = data.invoice;
+            const items = data.items;
+            
+            document.getElementById('printInvoiceNo').innerText = invoice.invoice_no;
+            const date = new Date(invoice.created_at);
+            document.getElementById('printDate').innerText = date.toLocaleDateString('en-LK');
+            document.getElementById('printTime').innerText = date.toLocaleTimeString('en-LK');
+            
+            let itemsHtml = '';
+            items.forEach(item => {
+                itemsHtml += `
+                    <tr style="border-bottom: 1px solid #e5e7eb;">
+                        <td style="padding: 8px;">${escapeHtml(item.description)}</td>
+                        <td style="padding: 8px; text-align: center;">${item.quantity}</td>
+                        <td style="padding: 8px; text-align: right;">${parseFloat(item.price).toFixed(2)}</td>
+                        <td style="padding: 8px; text-align: right;">${parseFloat(item.total).toFixed(2)}</td>
+                    </tr>
+                `;
+            });
+            document.getElementById('printItemsBody').innerHTML = itemsHtml;
+            
+            document.getElementById('printSubtotal').innerText = parseFloat(invoice.subtotal).toFixed(2);
+            document.getElementById('printDiscPercent').innerText = invoice.bill_discount_percent;
+            document.getElementById('printDiscAmount').innerText = parseFloat(invoice.bill_discount_amount).toFixed(2);
+            document.getElementById('printTaxPercent').innerText = invoice.tax_percent;
+            document.getElementById('printTaxAmount').innerText = parseFloat(invoice.tax_amount).toFixed(2);
+            document.getElementById('printFinalTotal').innerText = parseFloat(invoice.final_total).toFixed(2);
+            
+            const printDiv = document.getElementById('printableBill');
+            printDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                window.print();
+                setTimeout(() => {
+                    printDiv.style.display = 'none';
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Printed Successfully!',
+                        text: `Invoice ${invoiceNo} has been printed`,
+                        timer: 2000
+                    });
+                }, 500);
+            }, 100);
+        } else {
+            Swal.fire('Error', data.error || 'Could not fetch invoice', 'error');
+        }
+    } catch(e) {
+        Swal.fire('Error', 'Could not fetch invoice details', 'error');
+        console.error(e);
+    }
+}
+
+// Show reprint modal
+function showReprintModal() {
+    document.getElementById('reprintModal').classList.remove('hidden');
+    document.getElementById('reprintModal').classList.add('flex');
+    selectedReprintInvoice = null;
+    document.getElementById('selectedInvoicePreview').classList.add('hidden');
+    loadAllInvoices();
+}
+
+// Close reprint modal
+function closeReprintModal() {
+    document.getElementById('reprintModal').classList.add('hidden');
+    document.getElementById('reprintModal').classList.remove('flex');
+}
+
+// Reprint specific invoice
+async function reprintInvoice(invoiceNo) {
+    closeReprintModal();
+    await printBill(invoiceNo);
+}
+
+function escapeHtml(str) {
+    if(!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+        if(m === '&') return '&amp;';
+        if(m === '<') return '&lt;';
+        if(m === '>') return '&gt;';
+        return m;
+    });
+}
+
+// Click outside to hide autocomplete
+document.addEventListener('click', function(e) {
+    const searchContainer = document.querySelector('.search-container');
+    if(searchContainer && !searchContainer.contains(e.target)) {
+        hideAutocomplete();
+    }
+});
 </script>
+
 </body>
 </html>
