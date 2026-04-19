@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Item - Billing System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gradient-to-br from-blue-100 to-indigo-200 min-h-screen flex items-center justify-center">
+
+<div class="bg-white shadow-2xl rounded-3xl w-full max-w-md p-8">
+
+    <!-- Header -->
+    <div class="text-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-800">Add New Item</h1>
+        <p class="text-gray-500 text-sm">Billing System Management</p>
+    </div>
+
+    <!-- Form -->
+    <form action="insert_item.php" method="POST" class="space-y-4">
+
+        <!-- Description -->
+        <div>
+            <label class="text-sm text-gray-600">Item Description</label>
+            <input type="text" name="description" placeholder="Enter item name"
+                class="w-full mt-1 p-3 border rounded-xl focus:ring-2 focus:ring-blue-400 outline-none transition"
+                required>
+        </div>
+
+        <!-- Price -->
+        <div>
+            <label class="text-sm text-gray-600">Price (LKR)</label>
+            <input type="number" step="0.01" name="price" placeholder="0.00"
+                class="w-full mt-1 p-3 border rounded-xl focus:ring-2 focus:ring-blue-400 outline-none transition"
+                required>
+        </div>
+
+        <!-- Button -->
+        <button type="submit"
+            class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-3 rounded-xl font-semibold hover:scale-105 transform transition duration-300 shadow-lg">
+            ➕ Add Item
+        </button>
+
+    </form>
+
+    <!-- Footer -->
+    <div class="text-center mt-6 text-xs text-gray-400">
+        Auto-generated Item Code • Smart Billing System
+    </div>
+
+</div>
+
+</body>
+</html>
