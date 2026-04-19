@@ -106,7 +106,7 @@ CREATE TABLE invoice_items (
     total DECIMAL(10,2) NOT NULL,
     FOREIGN KEY (invoice_no) REFERENCES invoices(invoice_no)
 );
-📁 Required PHP Files
+###📁 Required PHP Files
 The system requires the following backend API endpoints:
 
 File	Purpose
